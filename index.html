@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SportDZ — Plateforme Sportive Algérienne</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   VARIABLES — Thème clair & chaleureux
+═══════════════════════════════════════ */
+:root {
+  --bg:        #f4f7ff;
+  --white:     #ffffff;
+  --surface:   #eef2ff;
+  --border:    #dde3f5;
+  --green:     #16a34a;
+  --green-lt:  #dcfce7;
+  --blue:      #1d4ed8;
+  --blue-lt:   #dbeafe;
+  --orange:    #ea580c;
+  --orange-lt: #ffedd5;
+  --red:       #dc2626;
+  --red-lt:    #fee2e2;
+  --text:      #1e293b;
+  --muted:     #64748b;
+  --light:     #94a3b8;
+  --shadow:    0 4px 20px rgba(30,41,59,0.10);
+  --shadow-lg: 0 12px 40px rgba(30,41,59,0.15);
+  --radius:    16px;
+  --radius-sm: 10px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 15px;
+}
+
+/* ═══════════════════════════════════════
+   ÉCRAN DE CONNEXION
+═══════════════════════════════════════ */
+#auth-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #fef9c3 100%);
+  padding: 20px;
+}
+
+.auth-wrap {
+  background: var(--white);
+  border-radius: 28px;
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 460px;
+  overflow: hidden;
+  animation: popIn .5s cubic-bezier(.16,1,.3,1) both;
+}
+
+@keyframes popIn {
+  from { opacity:0; transform:scale(.94) translateY(20px); }
+  to   { opacity:1; transform:scale(1) translateY(0); }
+}
+
+.auth-hero {
+  background: linear-gradient(135deg, #1d4ed8 0%, #16a34a 100%);
+  padding: 36px 40px 28px;
+  text-align: center;
+}
+
+.auth-logo-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 44px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 3px;
+}
+
+.auth-logo-sub {
+  color: rgba(255,255,255,0.85);
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.auth-flag { font-size: 28px; margin-top: 8px; }
+
+.auth-body { padding: 32px 40px 40px; }
+
+.auth-tabs {
+  display: flex;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  margin-bottom: 24px;
+}
+.auth-tab {
+  flex: 1;
+  padding: 11px;
+  border: none;
+  background: transparent;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 7px;
+  transition: all .2s;
+}
+.auth-tab.active {
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(29,78,216,.3);
+}
+
+.field-group { margin-bottom: 18px; }
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 7px;
+}
+
+.field-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--white);
+  outline: none;
+  transition: all .2s;
+}
+.field-input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(29,78,216,.1);
+}
+.field-input::placeholder { color: #b0bec5; }
+
+.field-hint {
+  font-size: 12px;
+  color: var(--light);
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+.btn-main {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #1d4ed8, #16a34a);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  letter-spacing: .5px;
+  transition: all .2s;
+  box-shadow: 0 6px 20px rgba(29,78,216,.3);
+}
+.btn-main:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(29,78,216,.4); }
+.btn-main:active { transform: translateY(0); }
+
+.demo-box {
+  background: var(--blue-lt);
+  border: 2px dashed #93c5fd;
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-top: 18px;
+  font-size: 13px;
+  color: var(--blue);
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════
+   APP SHELL
+═══════════════════════════════════════ */
+#app { display: none; }
+
+/* HEADER FIXE */
+.header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 68px;
+  background: var(--white);
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 200;
+  box-shadow: 0 2px 12px rgba(30,41,59,.07);
+}
+
+.header-logo {
+  font-family: 'Poppins', sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #1d4ed8, #16a34a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2px;
+}
+
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 40px;
+  padding: 6px 16px 6px 6px;
+  cursor: pointer;
+}
+.hav {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--blue), var(--green));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 800; font-size: 16px;
+}
+.hname { font-size: 14px; font-weight: 700; }
+.hrole { font-size: 11px; color: var(--muted); }
+
+.header-notif-btn {
+  position: relative;
+  width: 42px; height: 42px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.header-notif-btn:hover { border-color: var(--blue); background: var(--blue-lt); }
+.notif-badge {
+  position: absolute;
+  top: 4px; right: 4px;
+  width: 16px; height: 16px;
+  background: var(--red);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--white);
+}
+
+/* BOTTOM NAVBAR — mobile-first */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 72px;
+  background: var(--white);
+  border-top: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 200;
+  box-shadow: 0 -4px 16px rgba(30,41,59,.08);
+}
+
+.bnav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 4px;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all .2s;
+  position: relative;
+}
+.bnav-icon { font-size: 22px; line-height: 1; }
+.bnav-label { font-size: 10px; font-weight: 700; color: var(--light); text-transform: uppercase; letter-spacing: .5px; }
+.bnav-item.active .bnav-label { color: var(--blue); }
+.bnav-item.active .bnav-icon { filter: drop-shadow(0 2px 6px rgba(29,78,216,.4)); }
+.bnav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 25%; right: 25%;
+  height: 3px;
+  background: var(--blue);
+  border-radius: 2px 2px 0 0;
+}
+.bnav-pip {
+  position: absolute;
+  top: 6px; right: calc(50% - 18px);
+  width: 10px; height: 10px;
+  background: var(--red);
+  border-radius: 50%;
+  border: 2px solid var(--white);
+}
+
+/* MAIN CONTENT */
+.main {
+  padding: 88px 20px 90px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ═══════════════════════════════════════
+   PAGE SYSTEM
+═══════════════════════════════════════ */
+.page { display: none; }
+.page.active { display: block; animation: fadeUp .35s cubic-bezier(.16,1,.3,1) both; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* PAGE HEADER */
+.page-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.btn-back {
+  width: 40px; height: 40px;
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all .2s;
+  box-shadow: var(--shadow);
+}
+.btn-back:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-lt); }
+
+.page-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+}
+.page-subtitle {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 22px;
+  line-height: 1.5;
+  background: var(--orange-lt);
+  border-left: 4px solid var(--orange);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 10px 14px;
+  margin-top: 8px;
+}
+
+/* ═══════════════════════════════════════
+   COMPOSANTS COMMUNS
+═══════════════════════════════════════ */
+.section-label {
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--muted);
+  margin: 24px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.cards-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.card {
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  transition: all .2s;
+}
+.card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: #c7d7fb; }
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.tag-green  { background: var(--green-lt);  color: var(--green); }
+.tag-blue   { background: var(--blue-lt);   color: var(--blue); }
+.tag-orange { background: var(--orange-lt); color: var(--orange); }
+.tag-red    { background: var(--red-lt);    color: var(--red); }
+
+/* BUTTONS */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 18px;
+  border-radius: var(--radius-sm);
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all .2s;
+}
+.btn-green {
+  background: var(--green);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(22,163,74,.3);
+}
+.btn-green:hover { background: #15803d; transform: translateY(-1px); }
+.btn-blue {
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(29,78,216,.3);
+}
+.btn-blue:hover { background: #1e40af; transform: translateY(-1px); }
+.btn-outline {
+  background: var(--white);
+  border-color: var(--border);
+  color: var(--text);
+}
+.btn-outline:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-lt); }
+.btn-red {
+  background: var(--red-lt);
+  border-color: #fca5a5;
+  color: var(--red);
+}
+.btn-red:hover { background: var(--red); color: #fff; }
+.btn-lg { padding: 15px 24px; font-size: 16px; width: 100%; justify-content: center; }
+
+/* FORM */
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  margin-bottom: 7px;
+}
+.form-hint { font-size: 12px; color: var(--light); margin-bottom: 7px; }
+
+.field {
+  width: 100%;
+  padding: 13px 16px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--white);
+  outline: none;
+  transition: all .2s;
+  appearance: none;
+}
+.field:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(29,78,216,.08); }
+
+.field-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 42px;
+  cursor: pointer;
+}
+
+.form-group { margin-bottom: 20px; }
+
+/* INFO BOX */
+.info-box {
+  background: var(--blue-lt);
+  border: 2px solid #93c5fd;
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--blue);
+  line-height: 1.6;
+  margin-bottom: 18px;
+  display: flex;
+  gap: 10px;
+}
+.info-box .ib-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+/* ═══════════════════════════════════════
+   PAGE : TABLEAU DE BORD
+═══════════════════════════════════════ */
+.welcome-banner {
+  background: linear-gradient(135deg, #1d4ed8 0%, #16a34a 100%);
+  border-radius: var(--radius);
+  padding: 28px 28px 24px;
+  color: #fff;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.welcome-banner::after {
+  content: '🇩🇿';
+  position: absolute;
+  right: 24px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 56px;
+  opacity: .25;
+}
+.wb-hello { font-size: 14px; opacity: .85; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+.wb-name { font-family: 'Poppins', sans-serif; font-size: 30px; font-weight: 700; margin: 4px 0; }
+.wb-sub { font-size: 13px; opacity: .8; line-height: 1.5; }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.stat-box {
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: all .2s;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.stat-box:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.stat-icon-wrap {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+.stat-num { font-family: 'Poppins', sans-serif; font-size: 28px; font-weight: 700; line-height: 1; }
+.stat-lbl { font-size: 12px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-top: 3px; }
+.stat-trend { font-size: 11px; color: var(--green); font-weight: 700; margin-top: 2px; }
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.quick-btn {
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 8px 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+  box-shadow: var(--shadow);
+}
+.quick-btn:hover { border-color: var(--blue); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.qb-icon { font-size: 28px; line-height: 1; margin-bottom: 6px; }
+.qb-lbl { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; line-height: 1.3; }
+
+/* ═══════════════════════════════════════
+   PAGE : WILAYAS & CLUBS
+═══════════════════════════════════════ */
+.search-wrap {
+  position: relative;
+  margin-bottom: 16px;
+}
+.search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 18px; color: var(--muted); }
+.search-field {
+  width: 100%;
+  padding: 13px 16px 13px 44px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  background: var(--white);
+  outline: none;
+  transition: all .2s;
+}
+.search-field:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(29,78,216,.08); }
+
+.wilaya-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 10px;
+}
+.wilaya-tile {
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 14px;
+  cursor: pointer;
+  transition: all .2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow);
+}
+.wilaya-tile:hover, .wilaya-tile.sel {
+  border-color: var(--blue);
+  background: var(--blue-lt);
+}
+.wt-icon { font-size: 24px; flex-shrink: 0; }
+.wt-name { font-size: 14px; font-weight: 700; }
+.wt-count { font-size: 11px; color: var(--muted); }
+
+.club-card {
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  transition: all .2s;
+}
+.club-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.club-name { font-size: 16px; font-weight: 700; margin-bottom: 5px; }
+.club-addr { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+.club-sports { font-size: 20px; margin-bottom: 10px; }
+.club-row { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 2px solid var(--border); }
+.club-price { font-size: 15px; font-weight: 800; color: var(--green); }
+.club-rating { font-size: 13px; color: var(--muted); font-weight: 700; }
+
+/* ═══════════════════════════════════════
+   PAGE : RÉSERVATION
+═══════════════════════════════════════ */
+.res-stepper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 24px;
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+}
+.step {
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+.step::after {
+  content: '›';
+  position: absolute;
+  right: 0; top: 50%;
+  transform: translateY(-50%);
+  color: var(--light);
+  font-size: 18px;
+  font-weight: 700;
+}
+.step:last-child::after { display: none; }
+.step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800;
+  margin: 0 auto 4px;
+  background: var(--surface);
+  color: var(--muted);
+  border: 2px solid var(--border);
+}
+.step.done .step-num { background: var(--green); color: #fff; border-color: var(--green); }
+.step.active .step-num { background: var(--blue); color: #fff; border-color: var(--blue); }
+.step-lbl { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+.step.active .step-lbl { color: var(--blue); }
+.step.done .step-lbl { color: var(--green); }
+
+.slots-wrap {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.slot-btn {
+  padding: 11px 6px;
+  text-align: center;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--white);
+  transition: all .2s;
+}
+.slot-btn:hover:not(.taken) { border-color: var(--blue); color: var(--blue); background: var(--blue-lt); }
+.slot-btn.selected { background: var(--green); border-color: var(--green); color: #fff; }
+.slot-btn.taken {
+  background: var(--surface);
+  color: var(--light);
+  cursor: not-allowed;
+  border-style: dashed;
+  text-decoration: line-through;
+}
+
+.res-summary {
+  background: linear-gradient(135deg, var(--green-lt), var(--blue-lt));
+  border: 2px solid #86efac;
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.rs-title { font-size: 15px; font-weight: 800; margin-bottom: 12px; color: var(--green); }
+.rs-row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; padding: 6px 0; border-bottom: 1px solid rgba(22,163,74,.15); }
+.rs-row:last-child { border-bottom: none; }
+.rs-key { color: var(--muted); font-weight: 600; }
+.rs-val { font-weight: 800; }
+
+.my-res-card {
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.mrc-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: var(--green-lt);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.mrc-info { flex: 1; }
+.mrc-club { font-size: 15px; font-weight: 700; }
+.mrc-meta { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+/* ═══════════════════════════════════════
+   PAGE : ÉVÉNEMENTS
+═══════════════════════════════════════ */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  padding: 8px 16px;
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  background: var(--white);
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+}
+.filter-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+.filter-btn:hover:not(.active) { border-color: var(--blue); color: var(--blue); }
+
+.event-card {
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  margin-bottom: 12px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  transition: all .2s;
+}
+.event-card:hover { transform: translateX(4px); border-color: #c7d7fb; box-shadow: var(--shadow-lg); }
+
+.ec-date {
+  background: linear-gradient(135deg, var(--blue), #3b82f6);
+  color: #fff;
+  border-radius: 12px;
+  padding: 10px 14px;
+  text-align: center;
+  flex-shrink: 0;
+  min-width: 58px;
+}
+.ec-day { font-family: 'Poppins', sans-serif; font-size: 26px; font-weight: 700; line-height: 1; }
+.ec-month { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; opacity: .9; }
+
+.ec-info { flex: 1; }
+.ec-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.ec-meta { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.ec-spots { font-size: 12px; font-weight: 700; color: var(--orange); margin-top: 6px; }
+
+/* ═══════════════════════════════════════
+   PAGE : NOTIFICATIONS
+═══════════════════════════════════════ */
+.notif-card {
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+  margin-bottom: 10px;
+  display: flex;
+  gap: 14px;
+  cursor: pointer;
+  transition: all .2s;
+  position: relative;
+}
+.notif-card:hover { transform: translateX(4px); }
+.notif-card.unread { border-color: #93c5fd; background: #f0f7ff; }
+.notif-card.unread::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: var(--blue);
+  border-radius: var(--radius) 0 0 var(--radius);
+}
+.nc-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.nc-info { flex: 1; }
+.nc-title { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+.nc-body { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.nc-time { font-size: 11px; color: var(--light); margin-top: 4px; font-weight: 700; }
+
+/* ═══════════════════════════════════════
+   PAGE : PROFIL
+═══════════════════════════════════════ */
+.profile-hero {
+  background: linear-gradient(135deg, #1d4ed8 0%, #16a34a 100%);
+  border-radius: var(--radius);
+  padding: 28px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.pav {
+  width: 76px; height: 76px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  border: 3px solid rgba(255,255,255,.6);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; font-weight: 800;
+  flex-shrink: 0;
+}
+.p-name { font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 700; }
+.p-level { font-size: 13px; opacity: .85; margin-top: 3px; }
+.p-stats { display: flex; gap: 20px; margin-top: 10px; }
+.ps { text-align: center; }
+.ps-val { font-family: 'Poppins', sans-serif; font-size: 22px; font-weight: 700; }
+.ps-lbl { font-size: 10px; opacity: .75; text-transform: uppercase; letter-spacing: .5px; }
+
+.prog-item { margin-bottom: 14px; }
+.prog-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.prog-bar { height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 5px; transition: width 1.2s cubic-bezier(.16,1,.3,1); }
+
+.badge-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.badge-item {
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 8px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.bi-icon { font-size: 30px; margin-bottom: 5px; }
+.bi-name { font-size: 11px; font-weight: 700; color: var(--muted); line-height: 1.3; }
+
+/* ═══════════════════════════════════════
+   MODAL DE CONFIRMATION
+═══════════════════════════════════════ */
+.modal-bg {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(30,41,59,.5);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-bg.show { display: flex; animation: fadeIn .25s ease; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+.modal-box {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 40px 32px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  animation: popIn .4s cubic-bezier(.16,1,.3,1);
+}
+.modal-emoji { font-size: 64px; display: block; margin-bottom: 16px; animation: bounce .6s ease .2s both; }
+@keyframes bounce { 0%{transform:scale(0)} 60%{transform:scale(1.15)} 100%{transform:scale(1)} }
+.modal-title { font-family:'Poppins',sans-serif; font-size:26px; font-weight:700; color:var(--green); margin-bottom:10px; }
+.modal-text { font-size:14px; color:var(--muted); line-height:1.7; margin-bottom:24px; }
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+.toast-wrap {
+  position: fixed;
+  bottom: 84px; right: 16px;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.toast {
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-lg);
+  max-width: 300px;
+  animation: slideRight .35s cubic-bezier(.16,1,.3,1) both;
+}
+.toast.green { border-color: #86efac; background: var(--green-lt); color: var(--green); }
+.toast.blue  { border-color: #93c5fd; background: var(--blue-lt);  color: var(--blue); }
+.toast.orange{ border-color: #fdba74; background: var(--orange-lt);color: var(--orange); }
+@keyframes slideRight { from{opacity:0;transform:translateX(40px)} to{opacity:1;transform:translateX(0)} }
+
+/* LOGOUT */
+.logout-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--red-lt);
+  border: 2px solid #fca5a5;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--red);
+  transition: all .2s;
+  margin-top: 8px;
+}
+.logout-row:hover { background: var(--red); color: #fff; }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .quick-grid { grid-template-columns: repeat(4,1fr); }
+  .slots-wrap { grid-template-columns: repeat(3,1fr); }
+  .cards-row  { grid-template-columns: 1fr; }
+  .profile-hero { flex-direction: column; text-align: center; }
+}
+@media (min-width: 601px) {
+  .stats-grid { grid-template-columns: repeat(4,1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     ÉCRAN DE CONNEXION
+═══════════════════════════════════════ -->
+<div id="auth-screen">
+  <div class="auth-wrap">
+    <div class="auth-hero">
+      <div class="auth-logo-text">SportDZ GHS PROD15</div>
+      <div class="auth-logo-sub">Plateforme Sportive d'Algérie</div>
+      <div class="auth-flag">🇩🇿 🏅 ⚽</div>
+    </div>
+    <div class="auth-body">
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchAuthTab('login',this)">🔑 Connexion</button>
+        <button class="auth-tab" onclick="switchAuthTab('register',this)">✏️ Inscription</button>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="form-login">
+        <div class="field-group">
+          <div class="field-label">📧 Adresse Email</div>
+          <div class="field-hint">Entrez l'adresse email que vous avez utilisée pour vous inscrire.</div>
+          <input class="field-input" id="l-email" type="email" placeholder="exemple@gmail.com" value="ghilasthzr@gmail.com">
+        </div>
+        <div class="field-group">
+          <div class="field-label">🔒 Mot de passe</div>
+          <div class="field-hint">Votre mot de passe secret. Ne le partagez avec personne.</div>
+          <input class="field-input" id="l-pass" type="password" placeholder="••••••••" value="ghilasthzr12">
+        </div>
+        <button class="btn-main" onclick="doLogin()">🚀 Se connecter</button>
+        <div class="demo-box">
+          <strong>💡 Compte de démonstration :</strong><br>
+          Email : <strong>ghilasthzr@gmail.com</strong><br>
+          Mot de passe : <strong>ghilasthzr12</strong><br>
+          <em>Cliquez directement sur "Se connecter" — les champs sont déjà remplis !</em>
+        </div>
+      </div>
+
+      <!-- REGISTER -->
+      <div id="form-register" style="display:none">
+        <div class="field-group">
+          <div class="field-label">👤 Votre prénom et nom</div>
+          <input class="field-input" id="r-name" type="text" placeholder="Ex : Ahmed Benali">
+        </div>
+        <div class="field-group">
+          <div class="field-label">📧 Adresse Email</div>
+          <input class="field-input" id="r-email" type="email" placeholder="votre@email.com">
+        </div>
+        <div class="field-group">
+          <div class="field-label">📍 Votre Wilaya</div>
+          <div class="field-hint">Choisissez la wilaya (région) où vous habitez.</div>
+          <select class="field-input" id="r-wilaya-reg">
+            <option value="">-- Cliquez ici pour choisir --</option>
+            <option>Alger</option><option>Oran</option><option>Constantine</option>
+            <option>Tizi Ouzou</option><option>Annaba</option><option>Blida</option><option>Sétif</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <div class="field-label">🔒 Choisir un mot de passe</div>
+          <div class="field-hint">Minimum 8 caractères. Ex : Ahmed2024 — mélangez lettres et chiffres.</div>
+          <input class="field-input" id="r-pass" type="password" placeholder="Minimum 8 caractères">
+        </div>
+        <button class="btn-main" onclick="doRegister()">✅ Créer mon compte gratuit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     APPLICATION PRINCIPALE
+═══════════════════════════════════════ -->
+<div id="app">
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-logo">SportDZ </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="header-notif-btn" onclick="nav('notifications')" title="Voir les notifications">
+        🔔 <div class="notif-badge" id="notif-count">5</div>
+      </div>
+      <div class="header-user" onclick="nav('profile')">
+        <div class="hav" id="hav-text">G</div>
+        <div>
+          <div class="hname" id="hname-text">Ghassen</div>
+          <div class="hrole">⭐ Membre Or</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- ─── TABLEAU DE BORD ─── -->
+    <div class="page active" id="page-home">
+      <div class="welcome-banner">
+        <div class="wb-hello">Bienvenue sur SportDZ 🇩🇿</div>
+        <div class="wb-name" id="wb-name">Bonjour Ghassen !</div>
+        <div class="wb-sub">Choisissez une activité ci-dessous.<br>Réservez votre terrain en moins de 2 minutes !</div>
+      </div>
+
+      <div class="info-box">
+        <div class="ib-icon">💡</div>
+        <div>Utilisez le <strong>menu en bas</strong> pour naviguer entre les sections. Appuyez sur les boutons verts ou bleus pour agir.</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-box" onclick="nav('clubs')">
+          <div class="stat-icon-wrap" style="background:#dbeafe">🏟️</div>
+          <div>
+            <div class="stat-num">148</div>
+            <div class="stat-lbl">Clubs</div>
+            <div class="stat-trend">↑ +12 ce mois</div>
+          </div>
+        </div>
+        <div class="stat-box" onclick="nav('events')">
+          <div class="stat-icon-wrap" style="background:#dcfce7">🎯</div>
+          <div>
+            <div class="stat-num">27</div>
+            <div class="stat-lbl">Événements</div>
+            <div class="stat-trend">↑ 3 cette semaine</div>
+          </div>
+        </div>
+        <div class="stat-box" onclick="nav('reservation')">
+          <div class="stat-icon-wrap" style="background:#ffedd5">📅</div>
+          <div>
+            <div class="stat-num" id="dash-res-count">2</div>
+            <div class="stat-lbl">Réservations</div>
+            <div class="stat-trend">→ 1 demain</div>
+          </div>
+        </div>
+        <div class="stat-box" onclick="nav('profile')">
+          <div class="stat-icon-wrap" style="background:#fef9c3">⭐</div>
+          <div>
+            <div class="stat-num">920</div>
+            <div class="stat-lbl">Points</div>
+            <div class="stat-trend">Niveau Or</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">⚡ Accès rapide</div>
+      <div class="quick-grid">
+        <div class="quick-btn" onclick="nav('reservation')">
+          <div class="qb-icon">📅</div>
+          <div class="qb-lbl">Réserver un terrain</div>
+        </div>
+        <div class="quick-btn" onclick="nav('clubs')">
+          <div class="qb-icon">🗺️</div>
+          <div class="qb-lbl">Trouver un club</div>
+        </div>
+        <div class="quick-btn" onclick="nav('events')">
+          <div class="qb-icon">🏆</div>
+          <div class="qb-lbl">Voir les tournois</div>
+        </div>
+        <div class="quick-btn" onclick="nav('notifications')">
+          <div class="qb-icon">🔔</div>
+          <div class="qb-lbl">Mes notifications</div>
+        </div>
+      </div>
+
+      <div class="section-label">📅 Prochains événements</div>
+      <div id="home-events-list"></div>
+      <div style="text-align:center;margin-top:10px">
+        <button class="btn btn-outline" onclick="nav('events')">Voir tous les événements →</button>
+      </div>
+    </div>
+
+    <!-- ─── WILAYAS & CLUBS ─── -->
+    <div class="page" id="page-clubs">
+      <div class="page-head">
+        <div class="btn-back" onclick="nav('home')" title="Retour à l'accueil">⬅</div>
+        <div>
+          <div class="page-title">🗺️ Wilayas & Clubs</div>
+        </div>
+      </div>
+      <div class="page-subtitle">
+        💡 <strong>Comment utiliser cette page :</strong> Appuyez sur le nom d'une wilaya (région) pour voir la liste des clubs sportifs. Ensuite appuyez sur "Réserver" pour choisir ce club.
+      </div>
+
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input class="search-field" type="text" placeholder="Rechercher une wilaya… Ex : Alger" oninput="filterWilayas(this.value)">
+      </div>
+
+      <!-- Liste wilayas -->
+      <div id="wilaya-panel">
+        <div class="section-label">📍 Choisissez votre wilaya</div>
+        <div class="wilaya-grid" id="wilaya-grid"></div>
+      </div>
+
+      <!-- Liste clubs (cachée) -->
+      <div id="clubs-panel" style="display:none">
+        <div class="page-head" style="margin-bottom:12px">
+          <div class="btn-back" onclick="backToWilayas()" title="Retour aux wilayas">⬅</div>
+          <div class="page-title" id="clubs-panel-title">Clubs</div>
+        </div>
+        <div class="info-box">
+          <div class="ib-icon">💡</div>
+          <div>Appuyez sur le bouton <strong>"Réserver ce club"</strong> pour faire une réservation. Vous serez redirigé automatiquement.</div>
+        </div>
+        <div class="cards-row" id="clubs-list"></div>
+      </div>
+    </div>
+
+    <!-- ─── RÉSERVATION ─── -->
+    <div class="page" id="page-reservation">
+      <div class="page-head">
+        <div class="btn-back" onclick="nav('home')" title="Retour à l'accueil">⬅</div>
+        <div class="page-title">📅 Réservation</div>
+      </div>
+      <div class="page-subtitle">
+        💡 <strong>Comment réserver :</strong> Remplissez les 4 étapes dans l'ordre — Choisissez la wilaya, puis le club, puis la date, puis l'heure. Appuyez enfin sur "Confirmer".
+      </div>
+
+      <!-- Stepper -->
+      <div class="res-stepper" id="res-stepper">
+        <div class="step active" id="step1"><div class="step-num">1</div><div class="step-lbl">Wilaya</div></div>
+        <div class="step" id="step2"><div class="step-num">2</div><div class="step-lbl">Club</div></div>
+        <div class="step" id="step3"><div class="step-num">3</div><div class="step-lbl">Date & Sport</div></div>
+        <div class="step" id="step4"><div class="step-num">4</div><div class="step-lbl">Créneau</div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start" id="res-cols">
+        <!-- Formulaire -->
+        <div class="card">
+          <div class="form-group">
+            <label class="form-label">🗺️ Étape 1 — Wilaya (votre région)</label>
+            <p class="form-hint">Commencez par choisir la wilaya où se trouve le club que vous souhaitez réserver.</p>
+            <select class="field field-select" id="r-wilaya" onchange="onWilayaChange()">
+              <option value="">-- Cliquez ici pour choisir --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">🏟️ Étape 2 — Club / Terrain</label>
+            <p class="form-hint">Choisissez un club dans la wilaya sélectionnée.</p>
+            <select class="field field-select" id="r-club" onchange="onClubChange()">
+              <option value="">-- Choisissez d'abord une wilaya --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">⚽ Étape 3a — Type de sport</label>
+            <select class="field field-select" id="r-sport" onchange="updateStep(3)">
+              <option>⚽ Football</option>
+              <option>🏀 Basketball</option>
+              <option>🏸 Badminton</option>
+              <option>🎾 Tennis</option>
+              <option>🏊 Natation</option>
+              <option>🥊 Boxe</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">📆 Étape 3b — Date souhaitée</label>
+            <p class="form-hint">Choisissez le jour où vous voulez venir. Vous ne pouvez pas choisir une date passée.</p>
+            <input class="field" type="date" id="r-date" onchange="updateStep(3)">
+          </div>
+          <div class="form-group">
+            <label class="form-label">🕐 Étape 4 — Heure (créneau)</label>
+            <p class="form-hint">Les cases <span style="text-decoration:line-through;color:var(--light)">rayées</span> sont déjà prises. Choisissez une case verte ou bleue.</p>
+            <div class="slots-wrap" id="r-slots"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">👥 Nombre de joueurs</label>
+            <select class="field field-select">
+              <option>1 personne (solo)</option>
+              <option>2 personnes</option>
+              <option selected>5 personnes (équipe)</option>
+              <option>10 personnes</option>
+              <option>22 personnes (match complet)</option>
+            </select>
+          </div>
+          <button class="btn btn-green btn-lg" onclick="submitReservation()">
+            ✅ Confirmer ma réservation
+          </button>
+        </div>
+
+        <!-- Mes réservations -->
+        <div>
+          <div class="section-label">📋 Mes réservations en cours</div>
+          <div class="info-box">
+            <div class="ib-icon">💡</div>
+            <div>Voici vos réservations actives. Appuyez sur "Annuler" si vous ne pouvez pas venir.</div>
+          </div>
+          <div id="my-res-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── ÉVÉNEMENTS ─── -->
+    <div class="page" id="page-events">
+      <div class="page-head">
+        <div class="btn-back" onclick="nav('home')" title="Retour à l'accueil">⬅</div>
+        <div class="page-title">🎯 Événements sportifs</div>
+      </div>
+      <div class="page-subtitle">
+        💡 Des tournois et championnats organisés à travers toute l'Algérie. Appuyez sur <strong>"S'inscrire"</strong> pour participer à un événement.
+      </div>
+      <div class="filter-bar" id="ev-filters">
+        <button class="filter-btn active" onclick="filterEv('all',this)">🏅 Tous</button>
+        <button class="filter-btn" onclick="filterEv('football',this)">⚽ Football</button>
+        <button class="filter-btn" onclick="filterEv('basket',this)">🏀 Basket</button>
+        <button class="filter-btn" onclick="filterEv('tennis',this)">🎾 Tennis</button>
+        <button class="filter-btn" onclick="filterEv('natation',this)">🏊 Natation</button>
+      </div>
+      <div id="events-list"></div>
+    </div>
+
+    <!-- ─── NOTIFICATIONS ─── -->
+    <div class="page" id="page-notifications">
+      <div class="page-head">
+        <div class="btn-back" onclick="nav('home')" title="Retour à l'accueil">⬅</div>
+        <div class="page-title">🔔 Notifications</div>
+      </div>
+      <div class="page-subtitle">
+        💡 Ce sont les messages et alertes qui vous concernent. Les messages avec un <span style="color:var(--blue);font-weight:700">bord bleu</span> sont nouveaux et non lus.
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:14px">
+        <button class="btn btn-outline" onclick="markAllRead()">✓ Tout marquer comme lu</button>
+      </div>
+      <div id="notif-list"></div>
+    </div>
+
+    <!-- ─── PROFIL ─── -->
+    <div class="page" id="page-profile">
+      <div class="page-head">
+        <div class="btn-back" onclick="nav('home')" title="Retour à l'accueil">⬅</div>
+        <div class="page-title">👤 Mon Profil</div>
+      </div>
+      <div class="page-subtitle">
+        💡 Votre profil personnel sur SportDZ. Ici vous voyez votre niveau, vos badges et vos sports favoris.
+      </div>
+
+      <div class="profile-hero">
+        <div class="pav" id="pav-text">G</div>
+        <div>
+          <div class="p-name" id="p-name-text">Ghassen</div>
+          <div class="p-level">⭐ Membre Or — Niveau 7 sur SportDZ</div>
+          <div class="p-stats">
+            <div class="ps"><div class="ps-val" id="p-res-val">2</div><div class="ps-lbl">Réservations</div></div>
+            <div class="ps"><div class="ps-val">12</div><div class="ps-lbl">Matchs</div></div>
+            <div class="ps"><div class="ps-val">920</div><div class="ps-lbl">Points</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <div class="card">
+          <div class="section-label" style="margin-top:0">📊 Mes sports — Niveau</div>
+          <div class="info-box" style="margin-bottom:16px">
+            <div class="ib-icon">💡</div>
+            <div>Ces barres montrent votre niveau de pratique dans chaque sport.</div>
+          </div>
+          <div class="prog-item">
+            <div class="prog-row"><span>⚽ Football</span><span style="color:var(--green)">85%</span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:85%;background:linear-gradient(90deg,var(--green),#4ade80)"></div></div>
+          </div>
+          <div class="prog-item">
+            <div class="prog-row"><span>🏀 Basketball</span><span style="color:var(--blue)">62%</span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:62%;background:linear-gradient(90deg,var(--blue),#60a5fa)"></div></div>
+          </div>
+          <div class="prog-item">
+            <div class="prog-row"><span>🎾 Tennis</span><span style="color:var(--orange)">40%</span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:40%;background:linear-gradient(90deg,var(--orange),#fb923c)"></div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-label" style="margin-top:0">🏅 Mes badges</div>
+          <div class="info-box" style="margin-bottom:14px">
+            <div class="ib-icon">💡</div>
+            <div>Vous gagnez des badges en utilisant SportDZ. Continuez à jouer pour en débloquer plus !</div>
+          </div>
+          <div class="badge-grid">
+            <div class="badge-item"><div class="bi-icon">🥇</div><div class="bi-name">Premier match</div></div>
+            <div class="badge-item"><div class="bi-icon">🔥</div><div class="bi-name">7 jours actif</div></div>
+            <div class="badge-item"><div class="bi-icon">⚡</div><div class="bi-name">Réservation rapide</div></div>
+            <div class="badge-item"><div class="bi-icon">🤝</div><div class="bi-name">Esprit équipe</div></div>
+            <div class="badge-item"><div class="bi-icon">🏆</div><div class="bi-name">Tournoi gagné</div></div>
+            <div class="badge-item" style="opacity:.35"><div class="bi-icon">🎯</div><div class="bi-name">À débloquer</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="logout-row" onclick="doLogout()">
+        🚪 <span>Se déconnecter de SportDZ</span>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <div class="bnav-item active" id="bnav-home" onclick="nav('home')">
+      <span class="bnav-icon">🏠</span><span class="bnav-label">Accueil</span>
+    </div>
+    <div class="bnav-item" id="bnav-clubs" onclick="nav('clubs')">
+      <span class="bnav-icon">🏟️</span><span class="bnav-label">Clubs</span>
+    </div>
+    <div class="bnav-item" id="bnav-reservation" onclick="nav('reservation')">
+      <span class="bnav-icon">📅</span><span class="bnav-label">Réserver</span>
+    </div>
+    <div class="bnav-item" id="bnav-events" onclick="nav('events')">
+      <span class="bnav-icon">🎯</span><span class="bnav-label">Tournois</span>
+    </div>
+    <div class="bnav-item" id="bnav-notifications" onclick="nav('notifications')">
+      <span class="bnav-icon">🔔</span><span class="bnav-label">Alertes</span>
+      <div class="bnav-pip" id="bnav-pip"></div>
+    </div>
+  </nav>
+</div><!-- /app -->
+
+<!-- MODAL CONFIRMATION -->
+<div class="modal-bg" id="modal-confirm">
+  <div class="modal-box">
+    <span class="modal-emoji">✅</span>
+    <div class="modal-title">Réservation confirmée !</div>
+    <div class="modal-text" id="modal-text">Votre terrain a été réservé avec succès.</div>
+    <button class="btn btn-green btn-lg" onclick="closeModal()" style="font-size:16px">
+      Parfait, merci ! 🎉
+    </button>
+  </div>
+</div>
+
+<!-- TOASTS -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+// ═══════════════════════════════════════════════
+//  DONNÉES
+// ═══════════════════════════════════════════════
+const WILAYAS = [
+  {id:1, name:"Alger",       icon:"🏙️", nb:15},
+  {id:2, name:"Oran",        icon:"🌊", nb:11},
+  {id:3, name:"Constantine", icon:"🏛️", nb:9},
+  {id:4, name:"Annaba",      icon:"⚓", nb:7},
+  {id:5, name:"Blida",       icon:"🌹", nb:6},
+  {id:6, name:"Sétif",       icon:"🌾", nb:8},
+  {id:7, name:"Tizi Ouzou",  icon:"⛰️", nb:7},
+  {id:8, name:"Béjaïa",      icon:"🌅", nb:5},
+  {id:9, name:"Batna",       icon:"🏔️", nb:6},
+  {id:10,name:"Djelfa",      icon:"🐪", nb:4},
+  {id:11,name:"Tiaret",      icon:"🌿", nb:5},
+  {id:12,name:"Tlemcen",     icon:"🕌", nb:6},
+];
+
+const CLUBS = {
+  1:[
+    {name:"Club Omnisports d'Alger",     addr:"Hydra, Alger",    sports:"⚽🏀🎾", price:"800 DA/h", rating:4.8},
+    {name:"Stade Mustapha Tchaker",      addr:"Bab El Oued",     sports:"⚽🏃",   price:"600 DA/h", rating:4.5},
+    {name:"Complex Sportif El Biar",     addr:"El Biar, Alger",  sports:"🏊🥊🏸", price:"700 DA/h", rating:4.6},
+    {name:"Centre Sportif Hussein Dey",  addr:"Hussein Dey",     sports:"⚽🏀",   price:"500 DA/h", rating:4.2},
+  ],
+  2:[
+    {name:"Club Sportif Oranais",        addr:"Plateau, Oran",   sports:"⚽🎾",   price:"750 DA/h", rating:4.7},
+    {name:"Olympic de l'Ouest",          addr:"Es Sénia, Oran",  sports:"⚽🏊🏀", price:"650 DA/h", rating:4.4},
+    {name:"Terrain Ibn Badis",           addr:"Bir El Djir",     sports:"⚽",     price:"400 DA/h", rating:4.1},
+  ],
+  3:[
+    {name:"Club Sportif Konstantinois",  addr:"Centre, Constantine", sports:"⚽🥊", price:"600 DA/h", rating:4.6},
+    {name:"Complex Zouaghi",            addr:"Zouaghi, Constantine", sports:"🏃🏊🎾",price:"700 DA/h", rating:4.3},
+  ],
+  4:[{name:"Club Annabi Sport",          addr:"Annaba Centre",   sports:"⚽🏀",   price:"550 DA/h", rating:4.5}],
+  5:[{name:"Club Blidéen",              addr:"Blida Centre",    sports:"⚽🏸",   price:"500 DA/h", rating:4.3}],
+  6:[
+    {name:"Complex Sétifien",            addr:"Sétif Centre",    sports:"⚽🏀🎾", price:"650 DA/h", rating:4.7},
+    {name:"Stade du 8 Mai 1945",        addr:"Sétif",           sports:"⚽🏃",   price:"400 DA/h", rating:4.4},
+  ],
+  7:[{name:"Club Kabyle Sport",          addr:"Tizi Ouzou",      sports:"⚽🧗",   price:"700 DA/h", rating:4.8}],
+  8:[{name:"Club Bejaoui",              addr:"Béjaïa Centre",   sports:"⚽🏊",   price:"600 DA/h", rating:4.5}],
+  9:[{name:"Club Aurésien",             addr:"Batna Centre",    sports:"⚽🏀",   price:"500 DA/h", rating:4.3}],
+  10:[{name:"Desert Sport Club",        addr:"Djelfa",          sports:"⚽",     price:"400 DA/h", rating:4.0}],
+  11:[{name:"Tiaret Sport Club",        addr:"Tiaret Centre",   sports:"⚽🏃",   price:"450 DA/h", rating:4.1}],
+  12:[{name:"Club Tlemcénien",          addr:"Tlemcen",         sports:"⚽🎾🏸", price:"650 DA/h", rating:4.6}],
+};
+
+const EVENTS = [
+  {id:1, title:"Championnat National Football U21", day:"24",month:"Avr",lieu:"Stade 5 Juillet, Alger",  sport:"football", status:"Inscriptions ouvertes",places:12},
+  {id:2, title:"Tournoi Basketball 3×3",            day:"28",month:"Avr",lieu:"Salle Harcha, Alger",     sport:"basket",   status:"Complet",             places:0},
+  {id:3, title:"Championnat de Tennis d'Alger",     day:"02",month:"Mai",lieu:"Club El Biar, Alger",     sport:"tennis",   status:"Inscriptions ouvertes",places:8},
+  {id:4, title:"Coupe de Natation Algéroise",       day:"10",month:"Mai",lieu:"Piscine Olympique, Oran", sport:"natation", status:"Bientôt disponible",   places:16},
+  {id:5, title:"Tournoi Futsal Ramadan Cup",        day:"15",month:"Mai",lieu:"Salle Omnisport, Cst",    sport:"football", status:"Inscriptions ouvertes",places:6},
+  {id:6, title:"Marathon Sportif d'Annaba",         day:"22",month:"Mai",lieu:"Corniche, Annaba",        sport:"autre",    status:"Inscriptions ouvertes",places:100},
+];
+
+let NOTIFS = [
+  {id:1, icon:"⚽", title:"Match demain !", body:"Votre match Tournoi U21 est demain à 15h00 au Stade 5 Juillet. N'oubliez pas votre tenue !", time:"Il y a 30 min", unread:true},
+  {id:2, icon:"✅", title:"Réservation validée", body:"Votre terrain au Club Omnisports d'Alger pour le 24 Avril à 10h est bien confirmé.", time:"Il y a 2h", unread:true},
+  {id:3, icon:"🏆", title:"Nouveau tournoi disponible", body:"Un tournoi Basketball 3×3 est disponible à Oran le 28 Avril. Places limitées, inscrivez-vous vite !", time:"Il y a 5h", unread:true},
+  {id:4, icon:"⭐", title:"Vous avez gagné 50 points !", body:"Bravo ! Vous atteignez le niveau Or. Profitez de 10% de remise sur vos prochaines réservations.", time:"Hier", unread:false},
+  {id:5, icon:"📢", title:"Rappel d'événement", body:"Le Championnat National commence dans 3 jours. Confirmez votre participation avant la date limite.", time:"Il y a 2 jours", unread:false},
+  {id:6, icon:"🎁", title:"Offre spéciale weekend", body:"Ce weekend, profitez de -20% sur toutes les réservations de tennis et badminton. Valable jusqu'à dimanche !", time:"Il y a 3 jours", unread:false},
+];
+
+// Données de démo initiales (restaurées à chaque connexion demo)
+const DEMO_RESERVATIONS = [
+  {club:"Club Omnisports d'Alger", sport:"⚽ Football", date:"24 avr. 2025", slot:"10:00"},
+  {club:"Complex Sportif El Biar",  sport:"🏊 Natation",  date:"27 avr. 2025", slot:"14:00"},
+];
+
+let myReservations = [...DEMO_RESERVATIONS];
+
+let currentUser = {name:"Ghilas", email:"ghsthizir@gmail.com"};
+let selectedSlot = null;
+let currentEvFilter = 'all';
+
+// ═══════════════════════════════════════════════
+//  AUTH
+// ═══════════════════════════════════════════════
+function switchAuthTab(tab, btn) {
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('form-login').style.display    = tab==='login'    ? 'block' : 'none';
+  document.getElementById('form-register').style.display = tab==='register' ? 'block' : 'none';
+}
+
+function doLogin() {
+  const email = document.getElementById('l-email').value.trim();
+  const pass  = document.getElementById('l-pass').value.trim();
+  if (!email || !pass) { toast('⚠️ Veuillez remplir l\'email et le mot de passe.','orange'); return; }
+  const btn = document.querySelector('#form-login .btn-main');
+  btn.textContent = '⏳ Connexion en cours…';
+  btn.disabled = true;
+  setTimeout(() => {
+    // Extraire le prénom depuis l'email
+    const raw = email.split('@')[0].replace(/[^a-zA-ZÀ-ÿ]/g,' ').trim();
+    currentUser.name = raw.charAt(0).toUpperCase() + raw.slice(1);
+    currentUser.email = email;
+    // Restaurer les réservations de démo pour le compte de démonstration
+    myReservations = [...DEMO_RESERVATIONS];
+    launchApp();
+  }, 1000);
+}
+
+function doRegister() {
+  const nameVal  = document.getElementById('r-name').value.trim();
+  const emailVal = document.getElementById('r-email').value.trim();
+  const passVal  = document.getElementById('r-pass').value.trim();
+  if (!nameVal)  { toast('⚠️ Veuillez entrer votre prénom et nom.','orange'); return; }
+  if (!emailVal) { toast('⚠️ Veuillez entrer votre adresse email.','orange'); return; }
+  if (passVal.length < 8) { toast('⚠️ Mot de passe trop court (minimum 8 caractères).','orange'); return; }
+  const btn = document.querySelector('#form-register .btn-main');
+  btn.textContent = '⏳ Création du compte…';
+  btn.disabled = true;
+  setTimeout(() => {
+    // Nouveau utilisateur — aucune réservation au départ
+    currentUser.name  = nameVal.charAt(0).toUpperCase() + nameVal.slice(1);
+    currentUser.email = emailVal;
+    myReservations = [];
+    toast('✅ Compte créé avec succès !','green');
+    setTimeout(launchApp, 800);
+  }, 1200);
+}
+
+function launchApp() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  const init = currentUser.name.charAt(0).toUpperCase();
+  document.getElementById('hav-text').textContent = init;
+  document.getElementById('pav-text').textContent = init;
+  document.getElementById('hname-text').textContent = currentUser.name;
+  document.getElementById('p-name-text').textContent = currentUser.name;
+  document.getElementById('wb-name').textContent = 'Bonjour ' + currentUser.name + ' ! 👋';
+  initApp();
+  setTimeout(() => toast('👋 Bienvenue ' + currentUser.name + ' sur SportDZ !','green'), 400);
+}
+
+function doLogout() {
+  if (!confirm('Voulez-vous vraiment vous déconnecter de SportDZ ?')) return;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'flex';
+  // Remettre les champs de connexion
+  document.getElementById('l-email').value = 'ghilasthzr@gmail.com';
+  document.getElementById('l-pass').value  = 'ghilasthzr12';
+  // Réinitialiser le bouton connexion
+  const loginBtn = document.querySelector('#form-login .btn-main');
+  loginBtn.textContent = '🚀 Se connecter';
+  loginBtn.disabled = false;
+  // Réinitialiser le bouton inscription
+  const regBtn = document.querySelector('#form-register .btn-main');
+  regBtn.textContent = '✅ Créer mon compte gratuit';
+  regBtn.disabled = false;
+  // Revenir à l'onglet connexion
+  switchAuthTab('login', document.querySelector('.auth-tab'));
+  // Réinitialiser l'état de réservation
+  selectedSlot = null;
+}
+
+// ═══════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════
+function nav(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('.bnav-item').forEach(b => b.classList.remove('active'));
+  const nb = document.getElementById('bnav-' + page);
+  if (nb) nb.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ═══════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════
+function initApp() {
+  renderHomeEvents();
+  renderWilayas(WILAYAS);
+  initReservationPage();
+  renderEvents('all');
+  renderNotifs();
+  renderMyRes();
+  updateDashCount();   // synchroniser les compteurs dès le départ
+  updateNotifBadge();
+}
+
+// ─── Accueil : mini events ───
+function renderHomeEvents() {
+  document.getElementById('home-events-list').innerHTML =
+    EVENTS.slice(0,3).map(e => `
+      <div class="event-card" onclick="nav('events')">
+        <div class="ec-date" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6)">
+          <div class="ec-day">${e.day}</div><div class="ec-month">${e.month}</div>
+        </div>
+        <div class="ec-info">
+          <div class="ec-title">${e.title}</div>
+          <div class="ec-meta">📍 ${e.lieu}</div>
+        </div>
+        <div>
+          <span class="tag ${e.status==='Complet'?'tag-red':e.status.startsWith('Bientôt')?'tag-orange':'tag-green'}">
+            ${e.status}
+          </span>
+        </div>
+      </div>`).join('');
+}
+
+// ─── Wilayas ───
+function renderWilayas(list) {
+  document.getElementById('wilaya-grid').innerHTML = list.map(w => `
+    <div class="wilaya-tile" onclick="showClubs(${w.id},'${w.name}')">
+      <span class="wt-icon">${w.icon}</span>
+      <div>
+        <div class="wt-name">${w.name}</div>
+        <div class="wt-count">${w.nb} clubs</div>
+      </div>
+    </div>`).join('');
+}
+
+function filterWilayas(q) {
+  backToWilayas();
+  renderWilayas(WILAYAS.filter(w => w.name.toLowerCase().includes(q.toLowerCase())));
+}
+
+function showClubs(id, name) {
+  document.getElementById('wilaya-panel').style.display = 'none';
+  document.getElementById('clubs-panel').style.display  = 'block';
+  document.getElementById('clubs-panel-title').textContent = '🏟️ Clubs à ' + name;
+  const list = CLUBS[id] || [];
+  document.getElementById('clubs-list').innerHTML = list.map(c => `
+    <div class="club-card">
+      <div class="club-sports">${c.sports}</div>
+      <div class="club-name">${c.name}</div>
+      <div class="club-addr">📍 ${c.addr}</div>
+      <div style="margin-bottom:8px"><span class="tag tag-green">Ouvert</span> <span style="font-size:13px;color:var(--muted)">⭐ ${c.rating}/5</span></div>
+      <div class="club-row">
+        <div class="club-price">${c.price}</div>
+        <button class="btn btn-blue" onclick="prefillClub('${c.name}','${name}',${id})">📅 Réserver ce club</button>
+      </div>
+    </div>`).join('') || '<div style="color:var(--muted);padding:20px;text-align:center">Aucun club dans cette wilaya pour l\'instant.</div>';
+}
+
+function backToWilayas() {
+  document.getElementById('wilaya-panel').style.display = 'block';
+  document.getElementById('clubs-panel').style.display  = 'none';
+}
+
+function prefillClub(clubName, wilayaName, wilayaId) {
+  nav('reservation');
+  setTimeout(() => {
+    const ws = document.getElementById('r-wilaya');
+    const opt = Array.from(ws.options).find(o => o.text === wilayaName);
+    if (opt) { ws.value = opt.value; onWilayaChange(); }
+    setTimeout(() => {
+      const cs = document.getElementById('r-club');
+      const co = Array.from(cs.options).find(o => o.text.includes(clubName));
+      if (co) { cs.value = co.value; updateStep(2); }
+    }, 120);
+  }, 300);
+  toast('🏟️ ' + clubName + ' pré-sélectionné !','blue');
+}
+
+// ─── Réservation ───
+function initReservationPage() {
+  const ws = document.getElementById('r-wilaya');
+  WILAYAS.forEach(w => {
+    const o = document.createElement('option');
+    o.value = w.id; o.textContent = w.name;
+    ws.appendChild(o);
+  });
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('r-date').value = today;
+  document.getElementById('r-date').min   = today;
+  renderSlots();
+}
+
+function onWilayaChange() {
+  // Réinitialiser le créneau sélectionné quand la wilaya change
+  selectedSlot = null;
+  document.querySelectorAll('.slot-btn').forEach(s => s.classList.remove('selected'));
+  const id = parseInt(document.getElementById('r-wilaya').value);
+  const cs = document.getElementById('r-club');
+  cs.innerHTML = '<option value="">-- Cliquez pour choisir le club --</option>';
+  if (CLUBS[id]) {
+    CLUBS[id].forEach((c,i) => {
+      const o = document.createElement('option'); o.value = i; o.textContent = c.name; cs.appendChild(o);
+    });
+  }
+  updateStep(1);
+}
+
+const TAKEN = ['09:00','11:00','14:00','20:00'];
+
+function onClubChange() {
+  // Réinitialiser le créneau si le club change
+  selectedSlot = null;
+  document.querySelectorAll('.slot-btn').forEach(s => s.classList.remove('selected'));
+  updateStep(2);
+}
+function renderSlots() {
+  const hours = ['08:00','09:00','10:00','11:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00'];
+  document.getElementById('r-slots').innerHTML = hours.map(h => {
+    const taken = TAKEN.includes(h);
+    return `<button class="slot-btn${taken?' taken':''}" 
+      onclick="${taken?'':("selectSlot(this,'"+h+"')")}"
+      ${taken?'disabled':''}>
+      ${h}${taken?'<br><small>Pris</small>':''}
+    </button>`;
+  }).join('');
+}
+
+function selectSlot(el, t) {
+  document.querySelectorAll('.slot-btn').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedSlot = t;
+  updateStep(4);
+}
+
+function updateStep(n) {
+  const s = document.getElementById('r-wilaya').value;
+  const c = document.getElementById('r-club').value;
+  const d = document.getElementById('r-date').value;
+  for (let i=1;i<=4;i++) {
+    const el = document.getElementById('step'+i);
+    el.classList.remove('active','done');
+  }
+  if (s)            { document.getElementById('step1').classList.add('done'); }
+  if (s && c)       { document.getElementById('step2').classList.add('done'); }
+  if (s && c && d)  { document.getElementById('step3').classList.add('done'); }
+  if (s && c && d && selectedSlot) { document.getElementById('step4').classList.add('done'); }
+  // Active = next uncompleted
+  if (!s) document.getElementById('step1').classList.add('active');
+  else if (!c) document.getElementById('step2').classList.add('active');
+  else if (!d) document.getElementById('step3').classList.add('active');
+  else if (!selectedSlot) document.getElementById('step4').classList.add('active');
+}
+
+function submitReservation() {
+  const wi = document.getElementById('r-wilaya');
+  const cl = document.getElementById('r-club');
+  const dt = document.getElementById('r-date').value;
+  const sp = document.getElementById('r-sport').value;
+  if (!wi.value) { toast('⚠️ Choisissez d\'abord une wilaya (Étape 1)','orange'); return; }
+  if (!cl.value) { toast('⚠️ Choisissez un club (Étape 2)','orange'); return; }
+  if (!dt)       { toast('⚠️ Choisissez une date (Étape 3)','orange'); return; }
+  if (!selectedSlot) { toast('⚠️ Choisissez un créneau horaire (Étape 4)','orange'); return; }
+
+  const clubName   = cl.options[cl.selectedIndex].text;
+  const wilayaName = wi.options[wi.selectedIndex].text;
+  // Format long pour la modal (avec le jour de la semaine)
+  const modalDate = new Date(dt + 'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  // Format court pour stocker dans la liste des réservations
+  const shortDate = new Date(dt + 'T12:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});
+
+  document.getElementById('modal-text').innerHTML =
+    `<strong>${sp}</strong> au <strong>${clubName}</strong><br>
+     📍 ${wilayaName}<br>
+     📅 ${modalDate} à <strong>${selectedSlot}</strong><br><br>
+     Un SMS de confirmation sera envoyé à votre numéro enregistré sous 5 minutes.`;
+
+  document.getElementById('modal-confirm').classList.add('show');
+  myReservations.unshift({club:clubName, sport:sp, date:shortDate, slot:selectedSlot});
+  renderMyRes();
+  updateDashCount();
+}
+
+function closeModal() {
+  document.getElementById('modal-confirm').classList.remove('show');
+  // Réinitialiser TOUT le formulaire de réservation
+  document.getElementById('r-wilaya').value = '';
+  document.getElementById('r-club').innerHTML = '<option value="">-- Choisissez d\'abord une wilaya --</option>';
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('r-date').value = today;
+  selectedSlot = null;
+  document.querySelectorAll('.slot-btn').forEach(s => s.classList.remove('selected'));
+  updateStep(1); // le DOM est remis à zéro → step1 sera marqué "active"
+  toast('📲 SMS de confirmation envoyé !','green');
+  // Ajouter une notification
+  NOTIFS.unshift({id:Date.now(), icon:'✅', title:'Nouvelle réservation confirmée', body:'Votre réservation a été enregistrée avec succès. Bonne séance !', time:'À l\'instant', unread:true});
+  renderNotifs(); updateNotifBadge();
+}
+
+function renderMyRes() {
+  const el = document.getElementById('my-res-list');
+  el.innerHTML = myReservations.length ? myReservations.map((r,i) => `
+    <div class="my-res-card">
+      <div class="mrc-icon">⚽</div>
+      <div class="mrc-info">
+        <div class="mrc-club">${r.club}</div>
+        <div class="mrc-meta">${r.sport} • ${r.date} à ${r.slot}</div>
+        <div style="margin-top:8px;display:flex;gap:8px">
+          <span class="tag tag-green">✅ Confirmée</span>
+          <button class="btn btn-red" style="padding:5px 12px;font-size:12px" onclick="cancelRes(${i})">✕ Annuler</button>
+        </div>
+      </div>
+    </div>`).join('') :
+    '<div class="info-box" style="margin-top:0"><div class="ib-icon">💡</div><div>Vous n\'avez aucune réservation pour le moment. Remplissez le formulaire à gauche pour réserver votre terrain.</div></div>';
+}
+
+function cancelRes(i) {
+  if (!confirm('Voulez-vous vraiment annuler cette réservation ?')) return;
+  myReservations.splice(i,1);
+  renderMyRes();
+  updateDashCount();
+  toast('🗑️ Réservation annulée.','orange');
+}
+
+function updateDashCount() {
+  document.getElementById('dash-res-count').textContent = myReservations.length;
+  document.getElementById('p-res-val').textContent       = myReservations.length;
+}
+
+// ─── Événements ───
+function renderEvents(filter) {
+  currentEvFilter = filter;
+  const list = filter==='all' ? EVENTS : EVENTS.filter(e => e.sport===filter);
+  document.getElementById('events-list').innerHTML = list.map(e => `
+    <div class="event-card">
+      <div class="ec-date">
+        <div class="ec-day">${e.day}</div><div class="ec-month">${e.month}</div>
+      </div>
+      <div class="ec-info">
+        <div class="ec-title">${e.title}</div>
+        <div class="ec-meta">📍 ${e.lieu}</div>
+        <div class="ec-spots">${e.places>0 ? '⚠️ '+e.places+' places restantes' : ''}</div>
+      </div>
+      <div style="flex-shrink:0">
+        <span class="tag ${e.status==='Complet'?'tag-red':e.status.startsWith('Bientôt')?'tag-orange':'tag-green'}" style="display:block;margin-bottom:8px">
+          ${e.status}
+        </span>
+        <button class="btn ${e.status==='Complet'?'btn-outline':'btn-green'}"
+          style="font-size:13px;padding:9px 14px;${e.status==='Complet'?'opacity:.5;cursor:not-allowed':''}"
+          onclick="${e.status!=='Complet'?`joinEvent(${e.id})`:''}">
+          ${e.status==='Complet'?'Complet':'S\'inscrire'}
+        </button>
+      </div>
+    </div>`).join('') ||
+    '<div class="info-box"><div class="ib-icon">💡</div><div>Aucun événement dans cette catégorie pour le moment.</div></div>';
+}
+
+function filterEv(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderEvents(cat);
+}
+
+function joinEvent(id) {
+  const e = EVENTS.find(x => x.id===id);
+  if (!e) return;
+  const title = e.title;
+  e.places = Math.max(0, e.places-1);
+  if (e.places===0) e.status='Complet';
+  renderEvents(currentEvFilter);
+  renderHomeEvents();
+  toast('🎯 Inscrit à "'+title.substring(0,30)+(title.length>30?'…':'')+'"','green');
+  NOTIFS.unshift({id:Date.now(), icon:'🎯', title:'Inscription confirmée', body:'Vous êtes inscrit à "'+title+'". Bonne chance !', time:'À l\'instant', unread:true});
+  renderNotifs(); updateNotifBadge();
+}
+
+// ─── Notifications ───
+function renderNotifs() {
+  document.getElementById('notif-list').innerHTML = NOTIFS.map(n => `
+    <div class="notif-card ${n.unread?'unread':''}" onclick="readNotif(${n.id},this)">
+      <div class="nc-icon">${n.icon}</div>
+      <div class="nc-info">
+        <div class="nc-title">${n.title}</div>
+        <div class="nc-body">${n.body}</div>
+        <div class="nc-time">🕐 ${n.time}</div>
+      </div>
+      ${n.unread?'<span class="tag tag-blue" style="flex-shrink:0;align-self:flex-start">Nouveau</span>':''}
+    </div>`).join('');
+}
+
+function readNotif(id, el) {
+  const n = NOTIFS.find(x=>x.id===id);
+  if (n) n.unread = false;
+  el.classList.remove('unread');
+  renderNotifs(); updateNotifBadge();
+}
+
+function markAllRead() {
+  NOTIFS.forEach(n => n.unread=false);
+  renderNotifs(); updateNotifBadge();
+  toast('✓ Toutes les notifications sont marquées comme lues.','green');
+}
+
+function updateNotifBadge() {
+  const count = NOTIFS.filter(n=>n.unread).length;
+  document.getElementById('notif-count').textContent = count;
+  document.getElementById('notif-count').style.display = count ? 'flex' : 'none';
+  document.getElementById('bnav-pip').style.display = count ? 'block' : 'none';
+}
+
+// ─── Toast ───
+function toast(msg, type='green') {
+  const tw = document.getElementById('toast-wrap');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.innerHTML = msg;
+  tw.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transform='translateX(40px)'; t.style.transition='all .4s'; }, 3000);
+  setTimeout(() => t.remove(), 3500);
+}
+</script>
+</body>
+</html>
