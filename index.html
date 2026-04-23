@@ -1017,7 +1017,7 @@ body {
           <div class="field-hint">Votre mot de passe secret. Ne le partagez avec personne.</div>
           <input class="field-input" id="l-pass" type="password" placeholder="••••••••" value="ghilasthzr12">
         </div>
-        <button class="btn-main" onclick="doLogin()">🚀 Se connecter</button>
+        <button class="btn-main" onclick="doLogin(event)">🚀 Se connecter</button>
         <div class="demo-box">
           <strong>💡 Compte de démonstration :</strong><br>
           Email : <strong>ghilasthzr@gmail.com</strong><br>
@@ -1050,7 +1050,7 @@ body {
           <div class="field-hint">Minimum 8 caractères. Ex : Ahmed2024 — mélangez lettres et chiffres.</div>
           <input class="field-input" id="r-pass" type="password" placeholder="Minimum 8 caractères">
         </div>
-        <button class="btn-main" onclick="doRegister()">✅ Créer mon compte gratuit</button>
+        <button class="btn-main" onclick="doRegister(event)">✅ Créer mon compte gratuit</button>
       </div>
     </div>
   </div>
@@ -1062,7 +1062,7 @@ body {
 <div id="app">
   <!-- HEADER -->
   <header class="header">
-    <div class="header-logo">SportDZ GHS PROD15 </div>
+    <div class="header-logo">SportDZ GHS PROD15</div>
     <div style="display:flex;align-items:center;gap:10px">
       <div class="header-notif-btn" onclick="nav('notifications')" title="Voir les notifications">
         🔔 <div class="notif-badge" id="notif-count">5</div>
@@ -1085,7 +1085,7 @@ body {
       <div class="welcome-banner">
         <div class="wb-hello">Bienvenue sur SportDZ 🇩🇿</div>
         <div class="wb-name" id="wb-name">Bonjour Ghassen !</div>
-        <div class="wb-sub">Choisissez une activité ci-dessous.<br>Réservez votre terrain en moins de 2 minutes !</div>
+        <div class="wb-sub">Choisissez une activité ci-dessous.<br>Réservez un créneau d'entraînement (terrain, piscine, etc.) dans un club près de chez vous !</div>
       </div>
 
       <div class="info-box">
@@ -1164,7 +1164,7 @@ body {
         </div>
       </div>
       <div class="page-subtitle">
-        💡 <strong>Comment utiliser cette page :</strong> Appuyez sur le nom d'une wilaya (région) pour voir la liste des clubs sportifs. Ensuite appuyez sur "Réserver" pour choisir ce club.
+        💡 <strong>Comment utiliser cette page :</strong> Appuyez sur le nom d'une wilaya (région) pour voir la liste des clubs sportifs. Ensuite appuyez sur "Choisir ce club → réserver un créneau" pour sélectionner ce club et réserver un créneau horaire (1h) sur un équipement sportif (terrain de foot, piscine, etc.).
       </div>
 
       <div class="search-wrap">
@@ -1200,6 +1200,10 @@ body {
       </div>
       <div class="page-subtitle">
         💡 <strong>Comment réserver :</strong> Remplissez les 4 étapes dans l'ordre — Choisissez la wilaya, puis le club, puis la date, puis l'heure. Appuyez enfin sur "Confirmer".
+      </div>
+      <div class="info-box" style="margin-bottom:20px">
+        <div class="ib-icon">📌</div>
+        <div><strong>Ce que vous réservez :</strong> un créneau d'1 heure pour pratiquer le sport choisi, dans l'équipement du club sélectionné (terrain de foot, court de tennis, piscine, salle de boxe, etc.).</div>
       </div>
 
       <!-- Stepper -->
@@ -1502,7 +1506,8 @@ function switchAuthTab(tab, btn) {
   document.getElementById('form-register').style.display = tab==='register' ? 'block' : 'none';
 }
 
-function doLogin() {
+function doLogin(event) {
+  event.preventDefault();
   const email = document.getElementById('l-email').value.trim();
   const pass  = document.getElementById('l-pass').value.trim();
   if (!email || !pass) { toast('⚠️ Veuillez remplir l\'email et le mot de passe.','orange'); return; }
@@ -1516,11 +1521,13 @@ function doLogin() {
     currentUser.email = email;
     // Restaurer les réservations de démo pour le compte de démonstration
     myReservations = [...DEMO_RESERVATIONS];
+    bookedSlots = ['09:00','11:00','14:00','20:00'];
     launchApp();
   }, 1000);
 }
 
-function doRegister() {
+function doRegister(event) {
+  event.preventDefault();
   const nameVal  = document.getElementById('r-name').value.trim();
   const emailVal = document.getElementById('r-email').value.trim();
   const passVal  = document.getElementById('r-pass').value.trim();
@@ -1535,6 +1542,7 @@ function doRegister() {
     currentUser.name  = nameVal.charAt(0).toUpperCase() + nameVal.slice(1);
     currentUser.email = emailVal;
     myReservations = [];
+    bookedSlots = [];
     toast('✅ Compte créé avec succès !','green');
     setTimeout(launchApp, 800);
   }, 1200);
@@ -1650,7 +1658,7 @@ function showClubs(id, name) {
       <div style="margin-bottom:8px"><span class="tag tag-green">Ouvert</span> <span style="font-size:13px;color:var(--muted)">⭐ ${c.rating}/5</span></div>
       <div class="club-row">
         <div class="club-price">${c.price}</div>
-        <button class="btn btn-blue" onclick="prefillClub('${c.name}','${name}',${id})">📅 Réserver ce club</button>
+        <button class="btn btn-blue" onclick="prefillClub('${c.name}','${name}',${id})">📅 Choisir ce club → réserver un créneau</button>
       </div>
     </div>`).join('') || '<div style="color:var(--muted);padding:20px;text-align:center">Aucun club dans cette wilaya pour l\'instant.</div>';
 }
@@ -1663,16 +1671,43 @@ function backToWilayas() {
 function prefillClub(clubName, wilayaName, wilayaId) {
   nav('reservation');
   setTimeout(() => {
+    // Pré-remplir wilaya
     const ws = document.getElementById('r-wilaya');
     const opt = Array.from(ws.options).find(o => o.text === wilayaName);
     if (opt) { ws.value = opt.value; onWilayaChange(); }
+    
+    // Attendre que les clubs se chargent, puis sélectionner le club
     setTimeout(() => {
       const cs = document.getElementById('r-club');
       const co = Array.from(cs.options).find(o => o.text.includes(clubName));
-      if (co) { cs.value = co.value; updateStep(2); }
-    }, 120);
+      if (co) { cs.value = co.value; onClubChange(); }
+      
+      // Réinitialiser la date au jour actuel
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('r-date').value = today;
+      
+      // Vider le créneau sélectionné
+      selectedSlot = null;
+      document.querySelectorAll('.slot-btn').forEach(s => s.classList.remove('selected'));
+      
+      // Remettre le stepper à l'étape 3 (date & sport)
+      updateStep(3);
+    }, 150);
   }, 300);
-  toast('🏟️ ' + clubName + ' pré-sélectionné !','blue');
+  toast('🏟️ ' + clubName + ' pré-sélectionné ! ↓ Choisissez la date et l\'heure.','blue');
+}
+
+// Fonction pour réinitialiser complètement le formulaire de réservation
+function resetReservationForm() {
+  document.getElementById('r-wilaya').value = '';
+  document.getElementById('r-club').innerHTML = '<option value="">-- Choisissez d\'abord une wilaya --</option>';
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('r-date').value = today;
+  document.getElementById('r-date').min   = today;
+  selectedSlot = null;
+  document.querySelectorAll('.slot-btn').forEach(s => s.classList.remove('selected'));
+  renderSlots();
+  updateStep(1);
 }
 
 // ─── Réservation ───
@@ -1704,7 +1739,8 @@ function onWilayaChange() {
   updateStep(1);
 }
 
-const TAKEN = ['09:00','11:00','14:00','20:00'];
+// Tableau global stockant les créneaux réservés (format: HH:00)
+let bookedSlots = ['09:00','11:00','14:00','20:00'];
 
 function onClubChange() {
   // Réinitialiser le créneau si le club change
@@ -1712,12 +1748,19 @@ function onClubChange() {
   document.querySelectorAll('.slot-btn').forEach(s => s.classList.remove('selected'));
   updateStep(2);
 }
+
+// Fonction pour formater une date au format court (ex: "24 Avr 2025")
+function formatDateShort(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  return d.toLocaleDateString('fr-FR', {day:'numeric', month:'short', year:'numeric'});
+}
+
 function renderSlots() {
   const hours = ['08:00','09:00','10:00','11:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00'];
   document.getElementById('r-slots').innerHTML = hours.map(h => {
-    const taken = TAKEN.includes(h);
+    const taken = bookedSlots.includes(h);
     return `<button class="slot-btn${taken?' taken':''}" 
-      onclick="${taken?'':("selectSlot(this,'"+h+"')")}"
+      onclick="${taken?'':`selectSlot(this,'${h}')`}"
       ${taken?'disabled':''}>
       ${h}${taken?'<br><small>Pris</small>':''}
     </button>`;
@@ -1765,7 +1808,12 @@ function submitReservation() {
   // Format long pour la modal (avec le jour de la semaine)
   const modalDate = new Date(dt + 'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   // Format court pour stocker dans la liste des réservations
-  const shortDate = new Date(dt + 'T12:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});
+  const shortDate = formatDateShort(dt);
+
+  // Ajouter le créneau à bookedSlots pour la réservation suivante
+  if (!bookedSlots.includes(selectedSlot)) {
+    bookedSlots.push(selectedSlot);
+  }
 
   document.getElementById('modal-text').innerHTML =
     `<strong>${sp}</strong> au <strong>${clubName}</strong><br>
@@ -1782,13 +1830,7 @@ function submitReservation() {
 function closeModal() {
   document.getElementById('modal-confirm').classList.remove('show');
   // Réinitialiser TOUT le formulaire de réservation
-  document.getElementById('r-wilaya').value = '';
-  document.getElementById('r-club').innerHTML = '<option value="">-- Choisissez d\'abord une wilaya --</option>';
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('r-date').value = today;
-  selectedSlot = null;
-  document.querySelectorAll('.slot-btn').forEach(s => s.classList.remove('selected'));
-  updateStep(1); // le DOM est remis à zéro → step1 sera marqué "active"
+  resetReservationForm();
   toast('📲 SMS de confirmation envoyé !','green');
   // Ajouter une notification
   NOTIFS.unshift({id:Date.now(), icon:'✅', title:'Nouvelle réservation confirmée', body:'Votre réservation a été enregistrée avec succès. Bonne séance !', time:'À l\'instant', unread:true});
@@ -1802,7 +1844,7 @@ function renderMyRes() {
       <div class="mrc-icon">⚽</div>
       <div class="mrc-info">
         <div class="mrc-club">${r.club}</div>
-        <div class="mrc-meta">${r.sport} • ${r.date} à ${r.slot}</div>
+        <div class="mrc-meta">${r.sport} • <strong>${r.date}</strong> à ${r.slot}</div>
         <div style="margin-top:8px;display:flex;gap:8px">
           <span class="tag tag-green">✅ Confirmée</span>
           <button class="btn btn-red" style="padding:5px 12px;font-size:12px" onclick="cancelRes(${i})">✕ Annuler</button>
