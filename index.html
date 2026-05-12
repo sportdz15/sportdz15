@@ -989,6 +989,31 @@ body {
 </head>
 <body>
 
+<!-- Nouvelle page publique : Matchs & Billets -->
+<div id="public-matches" style="min-height:100vh; background:var(--bg); padding:20px; display:block;">
+  <div class="container" style="max-width:1000px; margin:0 auto;">
+    <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; margin-bottom:24px; gap:16px;">
+      <div>
+        <div class="header-logo" style="background:linear-gradient(135deg,#1d4ed8,#16a34a); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">SportDZ</div>
+        <div class="page-title" style="font-size:28px;">⚽ Matchs & Billets</div>
+        <p class="page-subtitle" style="margin-top:8px;">🇩🇿 Consultez les matchs à venir en Algérie à partir de juin 2026. Réservez votre place directement, sans compte.</p>
+      </div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+        <button class="btn btn-outline" onclick="showAuthScreen()" style="gap:6px;">🔐 Espace membre</button>
+      </div>
+    </div>
+
+    <div class="filter-bar" id="match-filters">
+      <button class="filter-btn active" onclick="filterMatches('all',this)">🏆 Tous</button>
+      <button class="filter-btn" onclick="filterMatches('Ligue 1',this)">⚽ Ligue 1</button>
+      <button class="filter-btn" onclick="filterMatches('Coupe',this)">🏆 Coupe</button>
+      <button class="filter-btn" onclick="filterMatches('Amical',this)">🤝 Amical</button>
+    </div>
+
+    <div id="public-matches-list"></div>
+  </div>
+</div>
+
 <!-- ═══════════════════════════════════════
      ÉCRAN DE CONNEXION
 ═══════════════════════════════════════ -->
@@ -1414,6 +1439,36 @@ body {
   </div>
 </div>
 
+<!-- Modal d'achat ticket -->
+<div class="modal-bg" id="modal-ticket">
+  <div class="modal-box" style="max-width:450px; text-align:left;">
+    <span class="modal-emoji">🎟️</span>
+    <div class="modal-title">Acheter votre place</div>
+    <div id="ticket-match-info" class="info-box" style="margin-bottom:16px;"></div>
+    <div class="form-group">
+      <label class="form-label">👤 Nom complet</label>
+      <input type="text" id="ticket-name" class="field" placeholder="Ex: Lyes Benali" required>
+    </div>
+    <div class="form-group">
+      <label class="form-label">📧 Email (pour recevoir le billet)</label>
+      <input type="email" id="ticket-email" class="field" placeholder="votre@email.com" required>
+    </div>
+    <div class="form-group">
+      <label class="form-label">🎟️ Nombre de tickets</label>
+      <select id="ticket-qty" class="field field-select">
+        <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <div class="info-box" style="background:#fef9c3; border-color:#fef3c7; color:#92400e;">
+        <span>💳 Paiement à la livraison / au stade (espèces ou carte Ooredoo/Djezzy) — vous recevez un code QR fictif.</span>
+      </div>
+    </div>
+    <button class="btn btn-green btn-lg" onclick="confirmTicketPurchase()">✅ Confirmer l'achat</button>
+    <button class="btn btn-outline" style="margin-top:12px; width:100%;" onclick="closeTicketModal()">Annuler</button>
+  </div>
+</div>
+
 <!-- TOASTS -->
 <div class="toast-wrap" id="toast-wrap"></div>
 
@@ -1474,6 +1529,114 @@ const EVENTS = [
   {id:5, title:"Tournoi Futsal Ramadan Cup",        day:"15",month:"Mai",lieu:"Salle Omnisport, Cst",    sport:"football", status:"Inscriptions ouvertes",places:6},
   {id:6, title:"Marathon Sportif d'Annaba",         day:"22",month:"Mai",lieu:"Corniche, Annaba",        sport:"autre",    status:"Inscriptions ouvertes",places:100},
 ];
+
+const MATCHES = [
+  {id:1, competition:"Ligue 1", home:"MC Alger", away:"JS Kabylie", stade:"Stade du 5 Juillet, Alger", date:"2026-06-07", heure:"17:00", prix:500, places:320},
+  {id:2, competition:"Ligue 1", home:"CR Belouizdad", away:"USM Alger", stade:"Stade du 20 Août, Alger", date:"2026-06-14", heure:"19:00", prix:600, places:280},
+  {id:3, competition:"Coupe", home:"ES Sétif", away:"Paradou AC", stade:"Stade 8 Mai 1945, Sétif", date:"2026-06-21", heure:"16:30", prix:450, places:150},
+  {id:4, competition:"Ligue 1", home:"JS Saoura", away:"MC Oran", stade:"Stade 20 Août 1955, Béchar", date:"2026-06-28", heure:"20:00", prix:400, places:90},
+  {id:5, competition:"Amical", home:"Équipe d'Algérie", away:"Tunisie", stade:"Stade Miloud Hadefi, Oran", date:"2026-07-04", heure:"21:00", prix:800, places:500},
+  {id:6, competition:"Coupe", home:"CR Belouizdad", away:"ES Sétif", stade:"Stade du 5 Juillet, Alger", date:"2026-07-12", heure:"18:00", prix:550, places:220},
+];
+
+let currentFilterValue = 'all';
+let currentMatchForTicket = null;
+
+function renderPublicMatches(filter='all') {
+  const container = document.getElementById('public-matches-list');
+  let filtered = MATCHES;
+  if (filter !== 'all') filtered = MATCHES.filter(m => m.competition === filter);
+  if (!filtered.length) {
+    container.innerHTML = '<div class="info-box">Aucun match pour cette catégorie.</div>';
+    return;
+  }
+  container.innerHTML = filtered.map(m => `
+    <div class="event-card" style="margin-bottom:16px;">
+      <div class="ec-date" style="background:linear-gradient(135deg,#dc2626,#ea580c)">
+        <div class="ec-day">${new Date(m.date).getDate()}</div>
+        <div class="ec-month">${new Date(m.date).toLocaleString('fr-FR', {month:'short'})}</div>
+      </div>
+      <div class="ec-info" style="flex:2">
+        <div class="ec-title">${m.home} 🆚 ${m.away}</div>
+        <div class="ec-meta">📍 ${m.stade} • ${m.heure}</div>
+        <div class="ec-meta">🏷️ ${m.competition} • 🎟️ ${m.prix} DA</div>
+        <div class="ec-spots">📊 Places disponibles : ${m.places}</div>
+      </div>
+      <div style="flex-shrink:0">
+        <button class="btn btn-green" onclick="openTicketModal(${m.id})" style="font-size:13px;padding:10px 16px;">
+          🎫 Acheter un ticket
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterMatches(cat, btn) {
+  currentFilterValue = cat;
+  document.querySelectorAll('#match-filters .filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderPublicMatches(cat);
+}
+
+function openTicketModal(matchId) {
+  currentMatchForTicket = MATCHES.find(m => m.id === matchId);
+  if (!currentMatchForTicket) return;
+  if (currentMatchForTicket.places <= 0) {
+    toast('⛔ Désolé, plus de places pour ce match.', 'orange');
+    return;
+  }
+  document.getElementById('ticket-match-info').innerHTML = `
+    🏟️ ${currentMatchForTicket.home} vs ${currentMatchForTicket.away}<br>
+    📅 ${new Date(currentMatchForTicket.date).toLocaleDateString('fr-FR')} à ${currentMatchForTicket.heure}<br>
+    🎟️ Prix unitaire : ${currentMatchForTicket.prix} DA
+  `;
+  document.getElementById('modal-ticket').classList.add('show');
+}
+
+function closeTicketModal() {
+  document.getElementById('modal-ticket').classList.remove('show');
+  currentMatchForTicket = null;
+}
+
+function confirmTicketPurchase() {
+  const name = document.getElementById('ticket-name').value.trim();
+  const email = document.getElementById('ticket-email').value.trim();
+  const qty = parseInt(document.getElementById('ticket-qty').value, 10);
+  if (!name || !email) {
+    toast('Veuillez entrer votre nom et email.', 'orange');
+    return;
+  }
+  if (!currentMatchForTicket) return;
+  if (currentMatchForTicket.places < qty) {
+    toast(`❌ Il ne reste que ${currentMatchForTicket.places} place(s).`, 'red');
+    return;
+  }
+  currentMatchForTicket.places -= qty;
+  const total = currentMatchForTicket.prix * qty;
+  const ref = 'TKT-' + Math.floor(Math.random() * 1000000);
+  document.getElementById('modal-ticket').classList.remove('show');
+  toast(`✅ Billets achetés ! ${qty} place(s) pour ${currentMatchForTicket.home} vs ${currentMatchForTicket.away}. Total : ${total} DA. Réf : ${ref}. Un email vient d'être envoyé à ${email} (simulé).`, 'green');
+  renderPublicMatches(currentFilterValue || 'all');
+  savePurchaseToLocal(name, email, currentMatchForTicket, qty, ref);
+  document.getElementById('ticket-name').value = '';
+  document.getElementById('ticket-email').value = '';
+  document.getElementById('ticket-qty').value = '1';
+  currentMatchForTicket = null;
+}
+
+function savePurchaseToLocal(name, email, match, qty, ref) {
+  const myTickets = JSON.parse(localStorage.getItem('myTickets') || '[]');
+  myTickets.push({ dateAchat: new Date().toISOString(), match: `${match.home} - ${match.away}`, dateMatch: match.date, stade: match.stade, qty, ref, nomAcheteur: name, email });
+  localStorage.setItem('myTickets', JSON.stringify(myTickets));
+}
+
+window.showAuthScreen = function() {
+  document.getElementById('public-matches').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('l-email').value = 'ghilasthzr@gmail.com';
+  document.getElementById('l-pass').value = 'ghilasthzr12';
+};
 
 let NOTIFS = [
   {id:1, icon:"⚽", title:"Match demain !", body:"Votre match Tournoi U21 est demain à 15h00 au Stade 5 Juillet. N'oubliez pas votre tenue !", time:"Il y a 30 min", unread:true},
@@ -1549,6 +1712,7 @@ function doRegister(event) {
 }
 
 function launchApp() {
+  document.getElementById('public-matches').style.display = 'none';
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   const init = currentUser.name.charAt(0).toUpperCase();
@@ -1564,7 +1728,9 @@ function launchApp() {
 function doLogout() {
   if (!confirm('Voulez-vous vraiment vous déconnecter de SportDZ ?')) return;
   document.getElementById('app').style.display = 'none';
-  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('public-matches').style.display = 'block';
+  renderPublicMatches(currentFilterValue || 'all');
   // Remettre les champs de connexion
   document.getElementById('l-email').value = 'ghilasthzr@gmail.com';
   document.getElementById('l-pass').value  = 'ghilasthzr12';
@@ -1578,7 +1744,6 @@ function doLogout() {
   regBtn.disabled = false;
   // Revenir à l'onglet connexion
   switchAuthTab('login', document.querySelector('.auth-tab'));
-  // Réinitialiser l'état de réservation
   selectedSlot = null;
 }
 
@@ -1958,6 +2123,12 @@ function toast(msg, type='green') {
   setTimeout(() => { t.style.opacity='0'; t.style.transform='translateX(40px)'; t.style.transition='all .4s'; }, 3000);
   setTimeout(() => t.remove(), 3500);
 }
+
+// Afficher la page publique par défaut et préparer la liste des matchs
+renderPublicMatches();
+document.getElementById('public-matches').style.display = 'block';
+document.getElementById('auth-screen').style.display = 'none';
+document.getElementById('app').style.display = 'none';
 </script>
 </body>
 </html>
